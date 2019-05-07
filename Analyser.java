@@ -1,22 +1,36 @@
 import java.io.*;
+import java.util.HashMap;
 import java.text.DecimalFormat;
 
 public class Analyser {
   
     String text;
+    HashMap<String, Double> FrequencyMap;
+    DecimalFormat df;
 
     public Analyser(String text){
+        FrequencyMap = new HashMap<String, Double>();
         this.text = text;
+        df = new DecimalFormat("#.###");
         run(text);   
     }
 
     public void run(String text){
-        System.out.println("Length: "+getLength());
-        double[] arr = getFrequencies();
-        DecimalFormat df = new DecimalFormat("#.###");
+        // populate hashmap
         for(int i=0; i<getLength(); i++){
-            System.out.println(text.charAt(i)+": "+getCount(text.charAt(i))+"; "+df.format(arr[i]));
+            String s = String.valueOf(text.charAt(i));  
+            if(FrequencyMap.containsValue(s)==false){
+                FrequencyMap.put(String.valueOf(text.charAt(i)),getFrequency(text.charAt(i)));
+            }
         }
+
+        // print out
+        System.out.println("Length: "+getLength());
+        for (String i : FrequencyMap.keySet()) {
+            char c = i.charAt(0);
+            System.out.println(i+": "+getCount(c)+"; "+df.format(FrequencyMap.get(i)));
+        }   
+
     }
 
     public static void main(String[] args){
@@ -63,9 +77,6 @@ public class Analyser {
         else if(args.length==0){
             System.out.println("Please enter some arguments!");
         }
-
-        //String x = args[0];
-        //Analyser trial = new Analyser(x);
     }
 
     public int getLength(){
@@ -91,11 +102,13 @@ public class Analyser {
     }
 
     public double[] getFrequencies(){
-        double[] Frequency = new double[getLength()];
-        for(int i=0; i<getLength(); i++){
-            Frequency[i] = getFrequency(text.charAt(i));
+        double[] Freq = new double[FrequencyMap.size()];
+        int x = 0;
+        for (String i : FrequencyMap.keySet()) {
+            Freq[x] = FrequencyMap.get(i);
+            x++;
         }
-        return Frequency;
+        return Freq;
     }
 
 }
