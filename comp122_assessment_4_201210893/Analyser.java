@@ -20,6 +20,7 @@ public class Analyser {
     HashMap<String, Double> FrequencyMap;
     DecimalFormat df;
 
+
     // Constructor to create our object
     public Analyser(String text){
         // create hashmap, set text to text in code and create Decimal formatter
@@ -42,7 +43,7 @@ public class Analyser {
         int loopParam = 0;
         String output = "";
         boolean pass = false;
-
+   
         // checking to see how many arguments have been inputted
         if(args.length>=1){
             // looping through the inputs to add them to the string
