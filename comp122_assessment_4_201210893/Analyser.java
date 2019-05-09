@@ -150,8 +150,8 @@ public class Analyser {
      * getting the length of the text and returning it
      */
     public int getLength(){
-        int len = text.length();
-        return len;
+        // returned text length
+        return text.length();
     }
 
     /**
@@ -181,12 +181,8 @@ public class Analyser {
      * @param c this is the character input for the method
      */
     public double getFrequency(char c){
-        // converting from int to double
-        double count = getCount(c);
-        double length = getLength();
-        // freq = count/length
-        double Freq = (count/length);
-        return Freq;
+        // casted getCount to double so the overall answer is a double
+        return ((double)getCount(c)/getLength());
     }
 
     /**
