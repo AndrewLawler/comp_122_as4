@@ -20,23 +20,22 @@ public class Analyser {
     HashMap<String, Double> FrequencyMap;
     DecimalFormat df;
 
-
     // Constructor to create our object
     public Analyser(String text){
         // create hashmap, set text to text in code and create Decimal formatter
         FrequencyMap = new HashMap<String, Double>();
         this.text = text;
         df = new DecimalFormat("#.###");
-        // populate the hash graph and print it out
+        // populate the hash map
         populateHash();
-        printOut();   
+        //printOut();   
     }
     
     /**
      * 
      * main
      * 
-     * In main we do all of the work with the file inputting. We take the txt files and then concatenate them into a String
+     * In main we do all of the work with the file inputting. We take the txt files and then concatenate them into a String and print it out.
      */
     public static void main(String[] args){
         // methods needed to loop through the arguments
@@ -103,6 +102,9 @@ public class Analyser {
             if(pass==true){
                 // create object
                 Analyser preText = new Analyser(output);
+                // print out the information
+                preText.printOut();
+
             }
         }
         // didnt enter any arguments
@@ -110,6 +112,7 @@ public class Analyser {
             System.out.println("Please enter some arguments!");
         }
     }
+
     /**
      * populateHash
      * 
@@ -202,6 +205,68 @@ public class Analyser {
             x++;
         }
         return Freq;
+    }
+
+     /**
+     * testableMain
+     * 
+     * method which returs identical string from mains print out so we can test the output in junit
+     * 
+     * @return ans which is the string 
+     */
+    public static String testableMain(String[] args){
+        // methods needed to loop through the arguments
+        int loopParam = 0;
+        String output = "";
+        // looping through the inputs to add them to the string
+        while(loopParam<args.length){
+            int i = 0;
+            // creating new file
+            File file = new File(args[loopParam]);
+            // checking if the file exists
+            if(file.exists()){
+                try {
+                    // opening new file input stream so we can read into the file
+                    FileInputStream is = new FileInputStream(args[loopParam]);
+                    // while we still have characters to read, add them to the output
+                    while((i = is.read()) !=-1 ) {
+                        char c = (char)i;
+                        output += c;
+                    }
+                    // loop through the rest of the arguments
+                    loopParam++;
+                    // close the input stream
+                    is.close();
+                    // checking to see if the file is empty
+                } catch (IOException e) {
+                    // caught an error, must be an issue with the specific file, tell the user this
+                    System.out.println("Error with file "+args[loopParam]+". FileStream would not open. Please check if file is empty.");
+                }
+            }  
+        }
+
+        // creates object which adds to hashmap
+        Analyser preText = new Analyser(output);
+        // call returnPrint which takes new hashmap and returns string output
+        String formatString = preText.returnPrint();
+        // return String
+        return formatString;
+
+    }
+
+    /**
+     * returnPrint
+     * 
+     * this method is simply to take the hashmap and return the output in the desired format as a string. This is used for the testing of my program using junit.
+     */
+    public String returnPrint(){
+        String JUnitTest = "Length: ";
+        JUnitTest += getLength();
+        for (String i : FrequencyMap.keySet()) {
+            char c = i.charAt(0);
+            JUnitTest += ("\n"+i+": "+getCount(c)+"; "+df.format(FrequencyMap.get(i)));
+        } 
+        return JUnitTest;
     }
 
 }
