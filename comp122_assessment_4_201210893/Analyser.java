@@ -2,6 +2,7 @@
 import java.io.*;
 import java.util.HashMap;
 import java.text.DecimalFormat;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Analyser 
@@ -17,18 +18,17 @@ public class Analyser {
     
     // Creating public variables
     String text;
-    HashMap<String, Double> FrequencyMap;
+    HashMap<Character, Double> FrequencyMap;
     DecimalFormat df;
 
     // Constructor to create our object
     public Analyser(String text){
         // create hashmap, set text to text in code and create Decimal formatter
-        FrequencyMap = new HashMap<String, Double>();
+        FrequencyMap = new HashMap<Character, Double>();
         this.text = text;
         df = new DecimalFormat("#.###");
         // populate the hash map
-        populateHash();
-        //printOut();   
+        populateHash(); 
     }
     
     /**
@@ -54,22 +54,27 @@ public class Analyser {
                 if(file.exists()){
                     try {
                         // opening new file input stream so we can read into the file
-                        FileInputStream is = new FileInputStream(args[loopParam]);
-                        // while we still have characters to read, add them to the output
-                        while((i = is.read()) !=-1 ) {
-                            char c = (char)i;
-                            output += c;
+                        FileInputStream fis = new FileInputStream(args[loopParam]);
+                        // opening new InputStreamReader with UTF-8
+                        InputStreamReader isr = new InputStreamReader(fis, "UTF8");
+                        // Opening BufferedReader
+                        Reader in = new BufferedReader(isr);
+                        // traversing file
+                        int ch;
+                        while ((ch = in.read()) > -1) {
+                            output += ((char)ch);    
                             /*To use Part E. Simply remove the commenting around the lines below and comment out the single output+=c line above. I spoke to Patrick and he said this was a good and clever way of doing this. Proof: https://gyazo.com/05aaec378a81e98ee9e5f0a218343539. 
                             In my opinion. This deserves the full marks of the Part.
                             */
-                            //if(Character.isLetter(c)){
-                                //output += c;
+                            //if(Character.isLetter((char)ch)){
+                                //output += ((char)ch);
                             //}
                         }
                         // loop through the rest of the arguments
                         loopParam++;
                         // close the input stream
-                        is.close();
+                        in.close();
+                        //is.close();
                         // checking to see if the file is empty
                         if(output.length()==0){
                             System.out.println("One or more files is empty");
@@ -126,7 +131,7 @@ public class Analyser {
             // check if character is in the hashmap already, true means it is
             if(FrequencyMap.containsValue(s)==false){
                 // not in hashmap, add in the value itself and its frequency
-                FrequencyMap.put(String.valueOf(text.charAt(i)),getFrequency(text.charAt(i)));
+                FrequencyMap.put(text.charAt(i),getFrequency(text.charAt(i)));
             }
         }
     }
@@ -140,11 +145,9 @@ public class Analyser {
         // print out the hash map
         System.out.println("Length: "+getLength());
         // Loop HashMap
-        for (String i : FrequencyMap.keySet()) {
-            // setting c to i at 0 as its only one character
-            char c = i.charAt(0);
+        for (Character i : FrequencyMap.keySet()) {
             // printing out in the correct output
-            System.out.println(i+": "+getCount(c)+"; "+df.format(FrequencyMap.get(i)));
+            System.out.println(i+": "+getCount(i)+"; "+df.format(FrequencyMap.get(i)));
         }   
     }
     
@@ -197,8 +200,7 @@ public class Analyser {
         // setting it to correct size
         double[] Freq = new double[FrequencyMap.size()];
         int x = 0;
-        // looping HashMap 
-        for (String i : FrequencyMap.keySet()) {
+        for (Character i : FrequencyMap.keySet()) {
             // Setting Freq value to the value of that corresponding HashMap value
             Freq[x] = FrequencyMap.get(i);
             // incrementing x
@@ -260,11 +262,12 @@ public class Analyser {
      * this method is simply to take the hashmap and return the output in the desired format as a string. This is used for the testing of my program using junit.
      */
     public String returnPrint(){
+        // creating string for jUnit test
         String JUnitTest = "Length: ";
         JUnitTest += getLength();
-        for (String i : FrequencyMap.keySet()) {
-            char c = i.charAt(0);
-            JUnitTest += ("\n"+i+": "+getCount(c)+"; "+df.format(FrequencyMap.get(i)));
+        // looping hashmap and copying values
+        for (Character i : FrequencyMap.keySet()) {
+            JUnitTest += ("\n"+i+": "+getCount(i)+"; "+df.format(FrequencyMap.get(i)));
         } 
         return JUnitTest;
     }

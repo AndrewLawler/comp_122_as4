@@ -1,4 +1,0 @@
-If i wanted to do isLetter and not extend class for E, can i send int
-of size of files to contructor so i can then access proper size with all
-characters including excluded ones in getLength, 
-this way i can do it all in a few lines.
