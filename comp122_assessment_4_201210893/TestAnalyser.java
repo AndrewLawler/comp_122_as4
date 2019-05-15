@@ -19,9 +19,18 @@ public class TestAnalyser {
      */
     @Test 
     public void testableMain(){
-        String[] args = new String[] {"run.txt"};
+        // testing umlauts input
+        String[] args = new String[] {"test1.txt"};
         String result = Analyser.testableMain(args);
-        String expected = "Length: 4\na: 1; 0.25\nb: 1; 0.25\nc: 1; 0.25\nd: 1; 0.25";
+        String expected = "Length: 3\nä: 1; 0.333\nö: 1; 0.333\nü: 1; 0.333";
+        assertEquals(result, expected);
+    }
+    @Test 
+    public void testableMain2(){
+        // testing simple normal input
+        String[] args = new String[] {"test2.txt"};
+        String result = Analyser.testableMain(args);
+        String expected = "Length: 4\na: 1; 0.25\nb: 1; 0.25\nc: 1; 0.25\nd: 1; 0.25";      
         assertEquals(result, expected);
     }
 
@@ -32,8 +41,15 @@ public class TestAnalyser {
      */
     @Test
     public void getLength(){
+        // testing string length
         Analyser a1 = new Analyser("string");
         assertTrue(a1.getLength()==6);
+    }
+    @Test
+    public void getLength2(){
+        // testing umlaut length
+        Analyser a1 = new Analyser("äöü");
+        assertTrue(a1.getLength()==3);
     }
 
     /**
@@ -47,6 +63,8 @@ public class TestAnalyser {
         assertTrue(a1.getCount('a')==1);
     }
 
+    // no need to test getCount more as we know it works from output in main
+
     /**
      * getFrequency
      * 
@@ -57,6 +75,8 @@ public class TestAnalyser {
         Analyser a1 = new Analyser("abcde");
         assertTrue(a1.getFrequency('a')==0.2);
     }
+
+    // no need to test getCount more as we know it works from output in main
 
     /**
      * getFrequencies

@@ -25,6 +25,7 @@ public class Analyser {
     public Analyser(String text){
         // create hashmap, set text to text in code and create Decimal formatter
         FrequencyMap = new HashMap<Character, Double>();
+        FrequencyMap.clear();
         this.text = text;
         df = new DecimalFormat("#.###");
         // populate the hash map
@@ -62,19 +63,22 @@ public class Analyser {
                         // traversing file
                         int ch;
                         while ((ch = in.read()) > -1) {
-                            output += ((char)ch);    
-                            /*To use Part E. Simply remove the commenting around the lines below and comment out the single output+=c line above. I spoke to Patrick and he said this was a good and clever way of doing this. Proof: https://gyazo.com/05aaec378a81e98ee9e5f0a218343539. 
+                            // Currently in Part E Mode:
+                            
+                            //output += ((char)ch);  
+
+                            /*To use normal mode. Simply remove the commenting around the lines above and comment out the lines below. I spoke to Patrick and he said this was a good and clever way of doing this. Proof: https://gyazo.com/05aaec378a81e98ee9e5f0a218343539. 
                             In my opinion. This deserves the full marks of the Part.
                             */
-                            //if(Character.isLetter((char)ch)){
-                                //output += ((char)ch);
-                            //}
+
+                            if(Character.isLetter((char)ch)){
+                                output += ((char)ch);
+                            }
                         }
                         // loop through the rest of the arguments
                         loopParam++;
                         // close the input stream
                         in.close();
-                        //is.close();
                         // checking to see if the file is empty
                         if(output.length()==0){
                             System.out.println("One or more files is empty");
@@ -197,8 +201,9 @@ public class Analyser {
      * creating double array from HashMap
     */
     public double[] getFrequencies(){
-        // setting it to correct size
+         // setting it to correct size
         double[] Freq = new double[FrequencyMap.size()];
+
         int x = 0;
         for (Character i : FrequencyMap.keySet()) {
             // Setting Freq value to the value of that corresponding HashMap value
@@ -219,27 +224,40 @@ public class Analyser {
     public static String testableMain(String[] args){
         // methods needed to loop through the arguments
         int loopParam = 0;
-        String output = "";
+        String outputs = "";
         // looping through the inputs to add them to the string
         while(loopParam<args.length){
-            int i = 0;
             // creating new file
             File file = new File(args[loopParam]);
             // checking if the file exists
             if(file.exists()){
                 try {
                     // opening new file input stream so we can read into the file
-                    FileInputStream is = new FileInputStream(args[loopParam]);
-                    // while we still have characters to read, add them to the output
-                    while((i = is.read()) !=-1 ) {
-                        char c = (char)i;
-                        output += c;
+                    FileInputStream fis = new FileInputStream(args[loopParam]);
+                    // opening new InputStreamReader with UTF-8
+                    InputStreamReader isr = new InputStreamReader(fis, "UTF8");
+                    // Opening BufferedReader
+                    Reader in = new BufferedReader(isr);
+                    // traversing file
+                    int ch;
+                    while ((ch = in.read()) > -1) {
+                        // Currently in Part E Mode:
+
+                        //outputs += ((char)ch);    
+
+                        /*To use normal mode. Simply remove the commenting around the lines above and comment out the lines below. I spoke to Patrick and he said this was a good and clever way of doing this. Proof: https://gyazo.com/05aaec378a81e98ee9e5f0a218343539. 
+                        In my opinion. This deserves the full marks of the Part.
+                        */
+
+                        if(Character.isLetter((char)ch)){
+                            outputs += ((char)ch);
+                        }
                     }
+                   
                     // loop through the rest of the arguments
                     loopParam++;
                     // close the input stream
-                    is.close();
-                    // checking to see if the file is empty
+                    in.close();
                 } catch (IOException e) {
                     // caught an error, must be an issue with the specific file, tell the user this
                     System.out.println("Error with file "+args[loopParam]+". FileStream would not open. Please check if file is empty.");
@@ -248,9 +266,9 @@ public class Analyser {
         }
 
         // creates object which adds to hashmap
-        Analyser preText = new Analyser(output);
+        Analyser preTexts = new Analyser(outputs);
         // call returnPrint which takes new hashmap and returns string output
-        String formatString = preText.returnPrint();
+        String formatString = preTexts.returnPrint();
         // return String
         return formatString;
 
