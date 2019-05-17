@@ -225,6 +225,7 @@ public class Analyser {
         // methods needed to loop through the arguments
         int loopParam = 0;
         String outputs = "";
+        boolean pass = true;
         // looping through the inputs to add them to the string
         while(loopParam<args.length){
             // creating new file
@@ -260,9 +261,22 @@ public class Analyser {
                     in.close();
                 } catch (IOException e) {
                     // caught an error, must be an issue with the specific file, tell the user this
-                    System.out.println("Error with file "+args[loopParam]+". FileStream would not open. Please check if file is empty.");
+                    System.out.println("Error with file. FileStream would not open. Please check if file is empty.");
+                    pass = false;
                 }
             }  
+            else{
+                // file does not exist
+                pass = false;
+                // if statement to get correct output
+                if(args.length==1){
+                    System.out.println("File does not exist");
+                }
+                else if(args.length>1){
+                    System.out.println("One or more files do not exist");
+                }
+                break;
+            }
         }
 
         // creates object which adds to hashmap

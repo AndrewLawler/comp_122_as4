@@ -25,15 +25,16 @@ public class TestAnalyser {
         String expected = "Length: 3\nä: 1; 0.333\nö: 1; 0.333\nü: 1; 0.333";
         assertEquals(result, expected);
     }
+    // test for part c // all other tests have proof on documentation
     @Test 
     public void testableMain2(){
         // testing simple normal input
-        String[] args = new String[] {"test2.txt"};
+        String[] args = new String[] {"abc.txt"};
         String result = Analyser.testableMain(args);
-        String expected = "Length: 4\na: 1; 0.25\nb: 1; 0.25\nc: 1; 0.25\nd: 1; 0.25";      
+        String expected = "Length: 3\na: 1; 0.333\nb: 1; 0.333\nc: 1; 0.333";      
         assertEquals(result, expected);
     }
-
+   
     /**
      * getLength
      * 
@@ -73,6 +74,7 @@ public class TestAnalyser {
     @Test 
     public void getFrequency(){
         Analyser a1 = new Analyser("abcde");
+        // testing frequency
         assertTrue(a1.getFrequency('a')==0.2);
     }
 
@@ -86,6 +88,7 @@ public class TestAnalyser {
     @Test 
     public void getFrequencies(){
         Analyser a1 = new Analyser("abcd");
+        // getting array to test
         double[] arr = a1.getFrequencies();
         assertTrue(arr[0]==0.25);
     }
